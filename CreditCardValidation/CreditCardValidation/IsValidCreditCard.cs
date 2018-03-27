@@ -9,40 +9,59 @@ namespace CreditCardValidation
     public class IsCardNumberValid
     {
         private string _cardNumber;
+        string[] _IndexCardNumber = new string[] { "4", "51", "52", "53", "54", "55", "6011", "34", "37" };
+
         public IsCardNumberValid(string cardNumber)
         {
             _cardNumber = cardNumber.Trim();
-        }
+        }         
 
-         string[] _IndexCardNumber = new string[] {"4", "51", "52", "53", "54", "55", "6011", "34", "37"};
         public bool Validate()
         {
-            bool result = false;
-            //check whether cardnumber has only numbers.
-            //if yes, check the length of card.
-            if (!string.IsNullOrEmpty(_cardNumber))
-            {                
-                if (IsDigitsOnly(_cardNumber) && _cardNumber.Length == 16)
+            try
+            {
+                bool result = false;
+                //check whether cardnumber has only numbers.
+                //if yes, check the length of card.
+                if (!string.IsNullOrEmpty(_cardNumber) && CheckValidCardType(_cardNumber))
                 {
-                    //check whether cardnumber is valid using MOD10 algorithm.
-                    return result = ValidateCardNumber(_cardNumber);
+                    if (IsDigitsOnly(_cardNumber) && _cardNumber.Length == 16)
+                    {
+                        //check whether cardnumber is valid using MOD10 algorithm.
+                        return result = ValidateCardNumber(_cardNumber);
+                    }
+                    else if (IsDigitsOnly(_cardNumber) && _cardNumber.Length == 15 &&
+                        (_cardNumber.StartsWith("34") || _cardNumber.StartsWith("37")))
+                    {
+                        //check whether cardnumber is valid using MOD10 algorithm.
+                        return result = ValidateVisaOrAmexCardNumber(_cardNumber);
+                    }
+                    else if (IsDigitsOnly(_cardNumber) && _cardNumber.Length == 13 &&
+                        _cardNumber.StartsWith("4"))
+                    {
+                        //check whether cardnumber is valid using MOD10 algorithm.
+                        return result = ValidateVisaOrAmexCardNumber(_cardNumber);
+                    }
                 }
-                else if (IsDigitsOnly(_cardNumber) && _cardNumber.Length == 15 && 
-                    (_cardNumber.StartsWith("34") || _cardNumber.StartsWith("37")))
-                {
-                    //check whether cardnumber is valid using MOD10 algorithm.
-                    return result = ValidateVisaOrAmexCardNumber(_cardNumber);
-                }
-                else if (IsDigitsOnly(_cardNumber) && _cardNumber.Length == 13 &&
-                    _cardNumber.StartsWith("4"))
-                {
-                    //check whether cardnumber is valid using MOD10 algorithm.
-                    return result = ValidateVisaOrAmexCardNumber(_cardNumber);
-                }
-            }
-            else
-                result = false;
+                else
+                    result = false;
 
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }            
+        }
+
+        private bool CheckValidCardType(string _cardNumber)
+        {
+            bool result = false;
+            foreach(string x in _IndexCardNumber)
+            {
+                if (_cardNumber.StartsWith(x))
+                    result =  true;
+            }
             return result;
         }
 
@@ -61,7 +80,6 @@ namespace CreditCardValidation
         {
             try
             {
-
                 Int32[] _cardnumber = cardnumber.Select(x => Int32.Parse(x.ToString())).ToArray();
 
                 //This is very straight forward way and easy to understand with basci c# validation of the MOD10 Algorithm

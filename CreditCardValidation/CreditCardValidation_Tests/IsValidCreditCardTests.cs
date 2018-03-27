@@ -4,16 +4,6 @@ using CreditCardValidation;
 
 namespace CreditCardValidation_Tests
 {
-
-    //VISA: 4111111111111111       (valid)
-    //VISA: 4111111111111          (invalid)
-    //VISA: 4012888888881881       (valid)
-    //AMEX: 378282246310005        (valid)
-    //Discover: 6011111111111117   (valid)
-    //MasterCard: 5105105105105100 (valid)
-    //MasterCard: 5105105105105106 (invalid)
-    //Unknown: 9111111111111111    (invalid)   
-
     [TestClass]
     public class IsValidCreditCardTests
     {
@@ -21,20 +11,36 @@ namespace CreditCardValidation_Tests
         [TestMethod]
         public void CreditCardValidation_CheckCreditCardNumberContainOnlyDigits_ReturnsTrueOnDigitsOnly()
         {
-            //Arrange
-
+            //Arrange  
+            _CreditCardNumber = new IsCardNumberValid("4111111111111111");
+            bool actual = false;
             //Act
-
+            actual = _CreditCardNumber.Validate();
             //Assert
+            Assert.AreEqual(true, actual);
+        }
+        [TestMethod]
+        public void CreditCardValidation_CheckCreditCardNumberContainDecimals_ReturnsFalseOnDicimals()
+        {
+            //Arrange  
+            _CreditCardNumber = new IsCardNumberValid("41111111111111.1");
+            bool actual = false;
+            //Act
+            actual = _CreditCardNumber.Validate();
+            //Assert
+            Assert.AreEqual(false, actual);
         }
 
+        [TestMethod]
         public void CreditCardValidation_CheckCreditCardNumberContainOtherDigits_ReturnsFlase()
         {
             //Arrange
-
+            _CreditCardNumber = new IsCardNumberValid("4012888888abc881");
+            bool actual = false;
             //Act
-
+            actual = _CreditCardNumber.Validate();
             //Assert
+            Assert.AreEqual(false, actual);
         }
 
         [TestMethod]
@@ -47,18 +53,7 @@ namespace CreditCardValidation_Tests
             actual = _CreditCardNumber.Validate();
             //Assert
             Assert.AreEqual(true, actual);
-        }
-        [TestMethod]
-        public void CreditCardValidation_CheckInValidVisaCreditCardNumberWith16Digits_ReturnsFalseifInValid()
-        {
-            //Arrange
-            _CreditCardNumber = new IsCardNumberValid("5105105105105106");
-            bool actual = false;
-            //Act
-            actual = _CreditCardNumber.Validate();
-            //Assert
-            Assert.AreEqual(false, actual);
-        }
+        }       
         [TestMethod]
         public void CreditCardValidation_CheckValidVisaCreditCardNumberWith13Digits_ReturnsTureifValid()
         {
@@ -82,25 +77,40 @@ namespace CreditCardValidation_Tests
             Assert.AreEqual(true, actual);
         }
         [TestMethod]
-        public void CreditCardValidation_CheckValidCreditCardNumberWith16Digits_ReturnsTureifValid()
+        public void CreditCardValidation_CheckValidDiscoverCreditCardNumberWith16Digits_ReturnsTureifValid()
         {
-            //Arrange
-
+            //Arrange  
+            _CreditCardNumber = new IsCardNumberValid("6011111111111117");
+            bool actual = false;
             //Act
-
+            actual = _CreditCardNumber.Validate();
             //Assert
+            Assert.AreEqual(true, actual);
         }
         [TestMethod]
-        public void CreditCardValidation_CheckValidCreditCardNumberWith16Digits_ReturnsFalseifInValid()
+        public void CreditCardValidation_CheckValidMasterCreditCardNumberWith16Digits_ReturnsTrueifValid()
         {
-            //Arrange
-
+            //Arrange  
+            _CreditCardNumber = new IsCardNumberValid("5105105105105100");
+            bool actual = false;
             //Act
-
+            actual = _CreditCardNumber.Validate();
             //Assert
+            Assert.AreEqual(true, actual);
         }
         [TestMethod]
-        public void CreditCardValidation_CheckInvalidCreditCardNumber_ReturnsFlaseIfInvalis()
+        public void CreditCardValidation_CheckInValidMasterCreditCardNumberWith16Digits_ReturnsFalseifInValid()
+        {
+            //Arrange  
+            _CreditCardNumber = new IsCardNumberValid("5105105105105106");
+            bool actual = false;
+            //Act
+            actual = _CreditCardNumber.Validate();
+            //Assert
+            Assert.AreEqual(false, actual);
+        }
+        [TestMethod]
+        public void CreditCardValidation_CheckInvalidCreditCardNumber_ReturnsFlaseIfInvalid()
         {
             //Arrange
             _CreditCardNumber = new IsCardNumberValid("9111111111111111");
