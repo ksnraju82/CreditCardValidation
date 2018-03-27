@@ -13,13 +13,15 @@ namespace CreditCardValidation
         {
             _cardNumber = cardNumber.Trim();
         }
+
+         string[] _IndexCardNumber = new string[] {"4", "51", "52", "53", "54", "55", "6011", "34", "37"};
         public bool Validate()
         {
             bool result = false;
             //check whether cardnumber has only numbers.
             //if yes, check the length of card.
             if (!string.IsNullOrEmpty(_cardNumber))
-            {
+            {                
                 if (IsDigitsOnly(_cardNumber) && _cardNumber.Length == 16)
                 {
                     //check whether cardnumber is valid using MOD10 algorithm.
@@ -66,7 +68,7 @@ namespace CreditCardValidation
                 //pick every alternate number, multiply by 2, if result is greated than 9, (sum up of the 2 digint number
                 // or mod of 9 gives the same result, this is simple maths), assign the value to the same array and sum all the
                 //items in array and mod by 10, if result is 0 it is valid or else not valid card number.
-                for (int i = _cardnumber.Length - 1; i >= 0; i--)
+                for (int i = _cardnumber.Length - 2; i >= 0; i--)
                 {
                     if (i == 0 || i % 2 == 0)
                         _cardnumber[i] = (_cardnumber[i] * 2 > 9) ? ((_cardnumber[i] * 2) % 9) : _cardnumber[i] * 2;
@@ -94,7 +96,7 @@ namespace CreditCardValidation
                 //pick every alternate number, multiply by 2, if result is greated than 9, (sum up of the 2 digint number
                 // or mod of 9 gives the same result, this is simple maths), assign the value to the same array and sum all the
                 //items in array and mod by 10, if result is 0 it is valid or else not valid card number.
-                for (int i = _cardnumber.Length - 2; i >= 0; i--)
+                for (int i = _cardnumber.Length - 1; i >= 1; i--)
                 {
                     if (i == 0 || i % 2 != 0)
                         _cardnumber[i] = (_cardnumber[i] * 2 > 9) ? ((_cardnumber[i] * 2) % 9) : _cardnumber[i] * 2;
